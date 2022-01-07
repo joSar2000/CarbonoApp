@@ -29,7 +29,7 @@ class _MainState extends State<Main> {
                     style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w300, fontSize: 23)),
                 Text(
-                  "MyUConnect",
+                  "CarbonoAPP",
                   style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w500, fontSize: 36),
                 )

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carbono_app/models/task.dart';
 import 'package:carbono_app/models/user.dart';
 import 'package:http/http.dart';
 
@@ -6,6 +7,7 @@ class UserService {
   final apiUrl = Uri.parse("https://carbonoapp.herokuapp.com/signin");
   final apiUrlSign = Uri.parse("https://carbonoapp.herokuapp.com/signup");
   final apiUrlLogin = Uri.parse("https://carbonoapp.herokuapp.com");
+  final apiUriTask = Uri.parse("https://carbonoapp.herokuapp.com/tasks");
   var url = ("carbonoapp.herokuapp.com");
 
   Future <Map<Users, dynamic>> getUsers() async {
@@ -59,4 +61,14 @@ class UserService {
     }
   }
   */
+  
+  /*
+  Servicios para los Tasks
+  */
+
+  Future <List<TaskModel>> getAllTasks () async {
+    Response res = await get(apiUriTask);
+    final dataTask = json.decode(res.body)['Activities'] as List;
+    return dataTask.map((e) => TaskModel.fromJson(e)).toList();
+  }
 }

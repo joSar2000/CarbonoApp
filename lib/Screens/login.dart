@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
   
   
    //Users user;
-   Future <Map<Users, dynamic>> getUsersLogin (String email, String password) async {
+   Future <Map<String, dynamic>> getUsersLogin (String email, String password) async {
     // ignore: unused_local_variable, unnecessary_cast
     //Response res = await get(apiUrlLogin);
     Response res = await get(Uri.https("carbonoapp.herokuapp.com", '/user/$email&$password'));
@@ -35,16 +35,39 @@ class _LoginState extends State<Login> {
     if (res.statusCode == 200) {
       //List<dynamic> body = jsonDecode(res.body);
       //List<Users> users = body.map((dynamic item) => Users.fromJson(item)).toList();
-      Map<Users, dynamic> data = Map<Users, dynamic>.from(json.decode(res.body));
+      Map<String, dynamic> data = Map<String, dynamic>.from(json.decode(res.body));
       if (data.isNotEmpty) {
         Navigator.push(context, MaterialPageRoute(builder: (context)=> Task()));
       } else {
+        _showAlertDialog(context);
         print("usuario no válido");
       }
       return data;
     } else {
       throw Exception("Falló nuevo usuario");
     }
+  }
+
+  void _showAlertDialog(BuildContext context) {
+    showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text(
+          'AVISO',
+          textAlign: TextAlign.center,
+        ),
+        content: const Text(
+          '¡Email y/o contraseña incorrectos!\n Por favor, ingrese nuevamente sus credenciales',
+          textAlign: TextAlign.center,
+        ),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+        ],
+      ),
+    );
   }
 
   @override
