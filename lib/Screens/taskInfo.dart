@@ -1,9 +1,11 @@
 // ignore_for_file: file_names, avoid_unnecessary_containers, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable, unused_element, prefer_final_fields, unused_field
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class TaskInfo extends StatefulWidget {
-  String titleTask, objetivo, body, recomendacion, bodyRec;
+  String titleTask, objetivo, body, recomendacion, bodyRec, email;
   int recompensa;
   TaskInfo(
       {Key? key,
@@ -12,7 +14,9 @@ class TaskInfo extends StatefulWidget {
       required this.body,
       required this.recompensa,
       required this.recomendacion,
-      required this.bodyRec})
+      required this.bodyRec,
+      required this.email
+      })
       : super(key: key);
 
   @override
@@ -20,13 +24,15 @@ class TaskInfo extends StatefulWidget {
 }
 
 class Contamination {
-  String? label;
-  bool? active;
-  Contamination(this.label, this.active);
+  String label;
+  bool active;
+  int? valor;
+  Contamination(this.label, this.active, this.valor);
 }
 
 class _TaskInfoState extends State<TaskInfo> {
-  int optionGroup = 0, selectedItems=0;
+  int optionGroup = 0, optionGroupList = 0, selectedItems = 0, _valueSlider = 0;
+  String _finalContamination = "", _finalTransporte = "";
   bool siVehiculo = false, noVehiculo = false, isSelected = false;
   List<String> _transporteList = [
     "Vehículo Particular",
@@ -38,17 +44,20 @@ class _TaskInfoState extends State<TaskInfo> {
     "Scooter"
   ];
   List<Contamination> _contaminacionTransporte = [
-    Contamination("Alta", false),
-    Contamination("Media Alta", false),
-    Contamination("Media", false),
-    Contamination("Media Baja", false),
-    Contamination("Baja", false),
+    Contamination("Alta", false, 0),
+    Contamination(
+        "Media Alta", false, 1),
+    Contamination("Media", false, 2),
+    Contamination(
+        "Media Baja", false, 3),
+    Contamination("Baja", false, 4),
   ];
 
   @override
   void initState() {
     super.initState();
     optionGroup = 0;
+    optionGroupList = 0;
   }
 
   void _showAlertDialog(BuildContext context) {
@@ -87,15 +96,66 @@ class _TaskInfoState extends State<TaskInfo> {
     });
   }
 
+  setValueList(int value) {
+    setState(() {
+      optionGroupList = value;
+      if (optionGroupList == 0) {
+        _contaminacionTransporte[0].active = true;
+        _contaminacionTransporte[1].active = false;
+        _contaminacionTransporte[2].active = false;
+        _contaminacionTransporte[3].active = false;
+        _contaminacionTransporte[4].active = false;
+      } else if (optionGroupList == 1) {
+        _contaminacionTransporte[0].active = false;
+        _contaminacionTransporte[1].active = true;
+        _contaminacionTransporte[2].active = false;
+        _contaminacionTransporte[3].active = false;
+        _contaminacionTransporte[4].active = false;
+      } else if (optionGroupList == 2) {
+        _contaminacionTransporte[0].active = false;
+        _contaminacionTransporte[1].active = false;
+        _contaminacionTransporte[2].active = true;
+        _contaminacionTransporte[3].active = false;
+        _contaminacionTransporte[4].active = false;
+      } else if (optionGroupList == 3) {
+        _contaminacionTransporte[0].active = false;
+        _contaminacionTransporte[1].active = false;
+        _contaminacionTransporte[2].active = false;
+        _contaminacionTransporte[3].active = true;
+        _contaminacionTransporte[4].active = false;
+      } else if (optionGroupList == 4) {
+        _contaminacionTransporte[0].active = false;
+        _contaminacionTransporte[1].active = false;
+        _contaminacionTransporte[2].active = false;
+        _contaminacionTransporte[3].active = false;
+        _contaminacionTransporte[4].active = true;
+      }
+    });
+  }
+
+  _sendData (BuildContext context) async {
+    await Firebase.initializeApp();
+    FirebaseFirestore.instance.collection("TasksComplete").add({
+      'Nombres': 'Jorge Enrique',
+      'Apellidos': 'Sarmiento Ordoñez',
+      'Email': widget.email,
+      'Cargo': 'estudiante',
+      'Actividad_Realizada': widget.titleTask,
+      'Tipo_Transporte': _finalTransporte,
+      'Tasa_Contaminacion': _finalContamination,
+      'Cantidad_Galones': _valueSlider 
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(extendBodyBehindAppBar: true,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-        title: Text("Detalles de la Actividad"),
-        centerTitle: true
-      ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+          title: Text("Detalles de la Actividad"),
+          centerTitle: true),
       body: ListView(
         children: <Widget>[
           Container(
@@ -333,55 +393,100 @@ class _TaskInfoState extends State<TaskInfo> {
                     ),
                     Wrap(
                       children: contaminationCheck(),
+                    ),
+                    Container(
+                      child: Text(
+                        "Elige una cantidad aproximada de galones que gasta tu medio de transporte",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(Icons.local_gas_station_outlined),
+                        Flexible(
+                          child: Container(
+                              padding: EdgeInsets.all(20.0),
+                              child: Slider(
+                                value: _valueSlider.toDouble(),
+                                max: 50.0,
+                                divisions: 10,
+                                label: _valueSlider.toString(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _valueSlider = newValue.round();
+                                  });
+                                },
+                              )),
+                        )
+                      ],
                     )
-                  ],                
+                  ],
                 ),
               ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(15.0),
+            child: MaterialButton(
+              elevation: 0.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              onPressed: () {
+                _sendData(context);
+              },
+              minWidth: 50.0,
+              height: 40.0,
+              color: Colors.lightBlue,
+              child: Text("Guardar Información"),
             ),
           )
         ],
       ),
     );
   }
-  List<Widget> techChips () {
+
+  List<Widget> techChips() {
     List<Widget> chips = [];
-    for (int i=0; i< _transporteList.length; i++) {
+    for (int i = 0; i < _transporteList.length; i++) {
       Widget item = Padding(
-        padding: EdgeInsets.all(1.0),
-        child: ChoiceChip(        
-          label: Text(_transporteList[i].toString()),
-          labelStyle: TextStyle(color: Colors.white),
-          backgroundColor: Colors.amber,
-          selected: selectedItems == i,
-          onSelected: (bool value)
-          {
-            setState(() {
-              selectedItems = i;
-            });
-          },
-           avatar: CircleAvatar(
-            child: Text(_transporteList[i].substring(0,1)
-          ),
-        ),
-      ));
+          padding: EdgeInsets.all(1.0),
+          child: ChoiceChip(
+            label: Text(_transporteList[i].toString()),
+            labelStyle: TextStyle(color: Colors.white),
+            backgroundColor: Colors.amber,
+            selected: selectedItems == i,
+            onSelected: (bool value) {
+              setState(() {
+                selectedItems = i;
+                _finalTransporte = _transporteList[i].toString();
+              });
+            },
+            avatar: CircleAvatar(
+              child: Text(_transporteList[i].substring(0, 1)),
+            ),
+          ));
       chips.add(item);
     }
     return chips;
   }
 
-  List<Widget> contaminationCheck () {
+  List<Widget> contaminationCheck() {
     List<Widget> checks = [];
     for (var i = 0; i < _contaminacionTransporte.length; i++) {
       Widget item = Padding(
         padding: EdgeInsets.all(0.0),
-        child: CheckboxListTile(
+        child: RadioListTile<int?>(
+          subtitle: Text("Escoja el impacto de contaminación"),
           title: Text(_contaminacionTransporte[i].label.toString()),
-          value: _contaminacionTransporte[i].active,
+          value: _contaminacionTransporte[i].valor,
+          groupValue: optionGroupList,
           onChanged: (value) {
-            setState(() {
-              _contaminacionTransporte[i].active = value;
-            });
+            setValueList(value as int);
+            _finalContamination = _contaminacionTransporte[i].label;
           },
+          selected: false,
         ),
       );
       checks.add(item);

@@ -38,6 +38,8 @@ dependencies:
   http: ^0.13.4
   chopper: ^4.0.3
   chopper_generator: ^4.0.3
+  cloud_firestore: ^3.1.6
+  firebase_core: ^1.11.0
 
 dev_dependencies:
   flutter_test:

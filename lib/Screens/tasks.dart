@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_element
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, unused_element, must_be_immutable
 
+import 'package:carbono_app/Screens/activities.dart';
 import 'package:carbono_app/Screens/principal.dart';
 import 'package:carbono_app/Screens/taskInfo.dart';
 import 'package:carbono_app/api/api_service.dart';
@@ -7,8 +8,10 @@ import 'package:carbono_app/models/task.dart';
 import 'package:flutter/material.dart';
 
 class Task extends StatefulWidget {
-  const Task({
+  String email;
+  Task({
     Key? key,
+    required this.email
   }) : super(key: key);
 
   @override
@@ -67,6 +70,7 @@ class _TaskState extends State<Task> {
                                     bodyRec: snapshot
                                         .data![index].recomendaciones!.bodyRec
                                         .toString(),
+                                        email: widget.email,
                                   )));
                       } else {
                         print ("Debes irte a otra pagina");
@@ -171,7 +175,7 @@ class _TaskState extends State<Task> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               accountName: Text("Usuario"),
-              accountEmail: Text("email"),
+              accountEmail: Text(widget.email),
               currentAccountPicture: CircleAvatar(
                 backgroundColor: Colors.orange,
                 child: Text(
@@ -181,10 +185,10 @@ class _TaskState extends State<Task> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
+              leading: Icon(Icons.volunteer_activism_sharp),
+              title: Text("Actividad Reciente"),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Activities(),));
               },
             ),
             ListTile(

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "885346325333",
+    "project_id": "carbonodb",
+    "storage_bucket": "carbonodb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:885346325333:android:e553613a9c9a80a2e215dc",
+        "android_client_info": {
+          "package_name": "com.example.carbono_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "885346325333-mrpsm408oqgf80cv6cqt5r57k6tv5rgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB26HdYyhlhvrEPEWGa4XdNhE3aFTxfnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "885346325333-mrpsm408oqgf80cv6cqt5r57k6tv5rgv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

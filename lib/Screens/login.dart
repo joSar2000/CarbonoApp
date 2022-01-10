@@ -37,7 +37,7 @@ class _LoginState extends State<Login> {
       //List<Users> users = body.map((dynamic item) => Users.fromJson(item)).toList();
       Map<String, dynamic> data = Map<String, dynamic>.from(json.decode(res.body));
       if (data.isNotEmpty) {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> Task()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> Task(email: _emailController.text,)));
       } else {
         _showAlertDialog(context);
         print("usuario no válido");
@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
               Container(
                 padding: EdgeInsets.all(10.0),
                 child: TextFormField(
-                    keyboardType: TextInputType.name,
+                    keyboardType: TextInputType.emailAddress,
                     autocorrect: false,
                     enableSuggestions: false,
                     decoration: InputDecoration(
