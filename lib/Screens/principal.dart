@@ -25,11 +25,20 @@ class _MainState extends State<Main> {
             child: Column(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
+                Hero(
+                  tag: 'tagImage$context',
+                  child: Container(
+                    child: Image.asset(
+                      'assets/logo.PNG',
+                      width: 300,
+                    ),
+                  ),
+                ),
                 Text("Bienvenido a",
                     style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w300, fontSize: 23)),
                 Text(
-                  "CarbonoAPP",
+                  "PachaKumir",
                   style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w500, fontSize: 36),
                 )

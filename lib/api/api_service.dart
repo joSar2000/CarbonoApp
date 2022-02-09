@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carbono_app/models/empresas.dart';
 import 'package:carbono_app/models/task.dart';
 import 'package:carbono_app/models/user.dart';
 import 'package:http/http.dart';
@@ -8,6 +9,7 @@ class UserService {
   final apiUrlSign = Uri.parse("https://carbonoapp.herokuapp.com/signup");
   final apiUrlLogin = Uri.parse("https://carbonoapp.herokuapp.com");
   final apiUriTask = Uri.parse("https://carbonoapp.herokuapp.com/tasks");
+  final apiUriEmpresa = Uri.parse("https://carbonoapp.herokuapp.com/empresas");
   var url = ("carbonoapp.herokuapp.com");
 
   Future <Map<Users, dynamic>> getUsers() async {
@@ -45,6 +47,17 @@ class UserService {
       throw Exception("Falló nuevo usuario");
     }
   }
+
+  Future <List<Users>> getUsersByEmail (String email) async {
+    Response res = await get(Uri.https("carbonoapp.herokuapp.com", "/userEmail/$email"));
+    if (res.statusCode == 200) {
+      final dataUser = (json.decode(res.body)['usuarios'] as List).map((e) 
+      => Users.fromJson(e)).toList();
+      return dataUser;
+    } else {
+      throw Exception ("Falló llamada de usuarios");
+    }
+  }
 /*
   Future <Map<String, dynamic>> getUsersLogin (String email, String password) async {
     // ignore: unused_local_variable, unnecessary_cast
@@ -71,4 +84,11 @@ class UserService {
     final dataTask = json.decode(res.body)['Activities'] as List;
     return dataTask.map((e) => TaskModel.fromJson(e)).toList();
   }
+
+  Future <List<EmpresasModel>> getAllEmpresas () async {
+    Response res = await get(apiUriEmpresa);
+    final dataEmpresa = json.decode(res.body)['Empresas'] as List;
+    return dataEmpresa.map((e) => EmpresasModel.fromJson(e)).toList();
+  }
+  
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:carbono_app/Screens/home.dart';
 import 'package:carbono_app/Screens/tasks.dart';
 import 'package:carbono_app/api/api_service.dart';
 import 'package:carbono_app/models/user.dart';
@@ -29,15 +30,11 @@ class _LoginState extends State<Login> {
    //Users user;
    Future <Map<String, dynamic>> getUsersLogin (String email, String password) async {
     // ignore: unused_local_variable, unnecessary_cast
-    //Response res = await get(apiUrlLogin);
     Response res = await get(Uri.https("carbonoapp.herokuapp.com", '/user/$email&$password'));
-    //print(res.body);
     if (res.statusCode == 200) {
-      //List<dynamic> body = jsonDecode(res.body);
-      //List<Users> users = body.map((dynamic item) => Users.fromJson(item)).toList();
       Map<String, dynamic> data = Map<String, dynamic>.from(json.decode(res.body));
       if (data.isNotEmpty) {
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> Task(email: _emailController.text,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> Home(email: _emailController.text,)));
       } else {
         _showAlertDialog(context);
         print("usuario no válido");

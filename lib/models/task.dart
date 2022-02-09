@@ -4,11 +4,12 @@ class TaskModel {
   String? body;
   int? recompensa;
   Recomendaciones? recomendaciones;
+  int? tipoActividad;
 
   TaskModel({
     required this.titleTask, required this.objetivo,
     required this.body, required this.recompensa,
-    required this.recomendaciones
+    required this.recomendaciones, required this.tipoActividad
   });
 
   TaskModel.fromJson(Map json)
@@ -16,7 +17,9 @@ class TaskModel {
     objetivo = json['objetivo'],
     body = json['body'],
     recompensa = json['recompensa'],
-    recomendaciones = Recomendaciones.fromJson(json['recomendaciones']);
+    tipoActividad = json['tipoActividad'],
+    recomendaciones = Recomendaciones.fromJson(json['recomendaciones'],
+    );
 
     Map toJson() {
       return {
@@ -24,7 +27,8 @@ class TaskModel {
         'objetivo': objetivo,
         'body': body,
         'recompensa': recompensa,
-        'recomendaciones': recomendaciones!.toJson()
+        'recomendaciones': recomendaciones!.toJson(),
+        'tipoActividad': tipoActividad
       };
     }
 }

@@ -133,9 +133,9 @@ class _TaskInfoState extends State<TaskInfo> {
     });
   }
 
-  _sendData (BuildContext context) async {
+   _sendData (BuildContext context) async {
     await Firebase.initializeApp();
-    FirebaseFirestore.instance.collection("TasksComplete").add({
+    FirebaseFirestore.instance.collection("TasksComplete").doc().collection("task").add({
       'Nombres': 'Jorge Enrique',
       'Apellidos': 'Sarmiento Ordoñez',
       'Email': widget.email,
