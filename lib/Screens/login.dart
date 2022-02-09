@@ -167,6 +167,7 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.all(10.0),
                     child: Text(
                       "Iniciar Sesión",
+                      textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
                           fontWeight: FontWeight.w400, fontSize: 20),
                     ),

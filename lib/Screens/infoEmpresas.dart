@@ -25,7 +25,7 @@ class InfoEmpresas extends StatefulWidget {
 
 class _InfoEmpresasState extends State<InfoEmpresas> {
   final TextEditingController _dinero = TextEditingController();
-
+  bool valido = false;
   double valor = 0;
   String compensacion = "";
 
@@ -80,8 +80,9 @@ class _InfoEmpresasState extends State<InfoEmpresas> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: HexColor("E6F9EA"),
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           Container(
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
@@ -91,12 +92,13 @@ class _InfoEmpresasState extends State<InfoEmpresas> {
             ),
           ),
         ],
-        backgroundColor: HexColor("D2FF96"),
+        backgroundColor: HexColor("00BA32"),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         title: Text(
           "Organizaciones",
           style: TextStyle(
-            color: HexColor("01200F"),
+            color: Colors.white,
+            fontWeight: FontWeight.bold
           ),
         ),
         centerTitle: true,
@@ -104,24 +106,25 @@ class _InfoEmpresasState extends State<InfoEmpresas> {
       body: ListView(
         children: [
           Container(
+            padding: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 5.0),
+            child: Image.asset(
+              'assets/naturaleza.png',
+              alignment: Alignment.center,
+              width: 100,
+            ),
+          ),
+          Container(
             padding: EdgeInsets.all(20.0),
             child: Card(
-              color: HexColor("D2FF96"),
+              color: HexColor("FFAA00"),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
                   children: [
-                    Container(
-                      child: Image.asset(                       
-                        'assets/naturaleza.png',
-                         alignment: Alignment.center,
-                        width: 500,
-                      ),
-                    ),
                     Card(
-                      color: HexColor("FFAA00"),
+                      color: HexColor("D2FF96"),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
                       child: Padding(
@@ -279,7 +282,7 @@ class _InfoEmpresasState extends State<InfoEmpresas> {
             child: ElevatedButton(
               style: ButtonStyle(
                   elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(Color(0xff003F72)),
+                  backgroundColor: MaterialStateProperty.all(HexColor("FFAA00")),
                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)))),
               child: Container(
@@ -293,31 +296,35 @@ class _InfoEmpresasState extends State<InfoEmpresas> {
               ),
               onPressed: () {
                 _generar();
+                setState(() {
+                  valido = true;
+                });
               },
             ),
           ),
-          Container(
-            padding: EdgeInsets.fromLTRB(60.0, 5.0, 60.0, 50.0),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  backgroundColor: MaterialStateProperty.all(Color(0xff003F72)),
-                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)))),
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  "COMPENSAR",
-                  style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w400, fontSize: 20),
+          if (valido == true && _dinero.text.isNotEmpty)
+            Container(
+              padding: EdgeInsets.fromLTRB(60.0, 5.0, 60.0, 50.0),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(HexColor("FFAA00")),
+                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)))),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "COMPENSAR",
+                    style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w400, fontSize: 20),
+                  ),
                 ),
+                onPressed: () {
+                  _sendDataEmpresas(context);
+                  _showAlertDialogConfirm(context);
+                },
               ),
-              onPressed: () {
-                _sendDataEmpresas(context);
-                _showAlertDialogConfirm(context);
-              },
-            ),
-          )
+            )
         ],
       ),
     );

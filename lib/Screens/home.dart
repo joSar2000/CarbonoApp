@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Colors.white),
         actions: [
           Container(
             padding: EdgeInsets.fromLTRB(0.0, 0.0, 20.0, 0.0),
@@ -53,12 +53,13 @@ class _HomeState extends State<Home> {
             ),
           ),
         ],
-        backgroundColor: HexColor("D2FF96"),
+        backgroundColor: HexColor("00BA32"),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         title: Text(
           "PachaKumir",
           style: TextStyle(
-            color: HexColor("01200F"),
+            color: Colors.white,
+            fontWeight: FontWeight.bold
           ),
         ),
         centerTitle: true,
@@ -70,7 +71,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
-                color: HexColor("D2FF96"),
+                color: HexColor("00BA32"),
               ),
               accountName: Text(
                 "Usuario",
@@ -113,7 +114,7 @@ class _HomeState extends State<Home> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: HexColor("D2FF96"),
+        backgroundColor: HexColor("00BA32"),
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
@@ -125,30 +126,30 @@ class _HomeState extends State<Home> {
             backgroundColor: HexColor("01200F"),
             icon: new Icon(
               Icons.task,
-              color: HexColor("01200F"),
+              color: Colors.white,
             ),
             title: new Text(
               'Encuesta',
-              style: TextStyle(color: HexColor("01200F")),
+              style: TextStyle(color: Colors.white,),
             ),
           ),
           BottomNavigationBarItem(
             backgroundColor: HexColor("01200F"),
-            icon: new Icon(Icons.home, color: HexColor("01200F")),
+            icon: new Icon(Icons.home, color: Colors.white,),
             title: new Text(
               'Home',
-              style: TextStyle(color: HexColor("01200F")),
+              style: TextStyle(color: Colors.white,),
             ),
           ),
           BottomNavigationBarItem(
             backgroundColor: HexColor("01200F"),
             icon: new Icon(
               Icons.payment,
-              color: HexColor("01200F"),
+              color: Colors.white,
             ),
             title: new Text(
               'Donar',
-              style: TextStyle(color: HexColor("01200F")),
+              style: TextStyle(color: Colors.white,),
             ),
           ),
         ],

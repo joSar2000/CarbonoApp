@@ -22,6 +22,7 @@ class _DonationState extends State<Donation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: HexColor("E6F9EA"),
       body: FutureBuilder<List<EmpresasModel>>(
         future: empresaService.getAllEmpresas(),
         builder: (context, snapshot) {

@@ -233,10 +233,11 @@ class _EncuestaState extends State<Encuesta> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: HexColor("E6F9EA"),
       resizeToAvoidBottomInset: false,
       body: ListView(
         children: [
-          Container(
+          Container(            
             margin: EdgeInsets.all(15.0),
             color: Colors.green,
             child: ExpansionPanelList(
@@ -741,7 +742,7 @@ class _EncuestaState extends State<Encuesta> {
                 child: Container(
                     padding: EdgeInsets.all(20.0),
                     child: Text(
-                      "Valor del Cálculo: $resultadoFinal",
+                      "Valor del Cálculo:\n$resultadoFinal kg de CO2/litro",
                       textAlign: TextAlign.center,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     )),
@@ -750,14 +751,20 @@ class _EncuestaState extends State<Encuesta> {
                 child: Container(
                   padding: EdgeInsets.all(50.0),
                   child: FloatingActionButton(
+                    backgroundColor: HexColor("FFAA00"),
                     heroTag: Text("1"),
                     child: Icon(Icons.calculate),
                     elevation: 5.0,
                     onPressed: () {
-                      CalcularEmision();
-                      setState(() {
-                        _generar = true;
-                      });
+                      if (_cantidadGalones.text.isNotEmpty &&
+                          _cantidadKilometros.text.isNotEmpty) {
+                        CalcularEmision();
+                        setState(() {
+                          _generar = true;
+                        });
+                      } else {
+                        _showAlertDialogNoData(context);
+                      }
                     },
                   ),
                 ),
@@ -772,9 +779,7 @@ class _EncuestaState extends State<Encuesta> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
-          if (_generar == true &&
-              _cantidadGalones.text.isNotEmpty &&
-              _cantidadKilometros.text.isNotEmpty)
+          if (_generar == true)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -782,6 +787,7 @@ class _EncuestaState extends State<Encuesta> {
                     child: Container(
                   padding: EdgeInsets.all(50.0),
                   child: FloatingActionButton(
+                    backgroundColor: HexColor("FFAA00"),
                     heroTag: Text("2"),
                     child: Icon(Icons.check),
                     elevation: 5.0,
@@ -798,6 +804,7 @@ class _EncuestaState extends State<Encuesta> {
                     child: Container(
                   padding: EdgeInsets.all(50.0),
                   child: FloatingActionButton(
+                    backgroundColor: HexColor("FFAA00"),
                     heroTag: Text("3"),
                     child: Icon(Icons.disabled_by_default),
                     elevation: 5.0,
@@ -819,7 +826,7 @@ class _EncuestaState extends State<Encuesta> {
                 style: ButtonStyle(
                     elevation: MaterialStateProperty.all(0),
                     backgroundColor:
-                        MaterialStateProperty.all(Color(0xff003F72)),
+                        MaterialStateProperty.all(HexColor("FFAA00")),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)))),
                 child: Container(
@@ -831,11 +838,34 @@ class _EncuestaState extends State<Encuesta> {
                   ),
                 ),
                 onPressed: () {
-                  _showAlertDialogCompensar(context);
-                  _sendDataHabits(context);
-                  _sendDataValoracion(context);
-                  _sendDataInfo(context);
-                  _sendCompensacion(context);
+                  if (_cantidadGalones.text.isNotEmpty &&
+                      _cantidadKilometros.text.isNotEmpty &&
+                      _edadText.text.isNotEmpty &&
+                      _compensacionText13.text.isNotEmpty) {
+                    if (_optionGroupCo10 == 0) {
+                      if (_compensacionText11.text.isNotEmpty) {
+                        _showAlertDialogCompensar(context);
+                        _sendDataHabits(context);
+                        _sendDataValoracion(context);
+                        _sendDataInfo(context);
+                        _sendCompensacion(context);
+                      } else {
+                        _showAlertDialogNoDataValo(context);
+                      }
+                    } else if (_optionGroupCo10 == 1) {
+                      if (_compensacionText10.text.isNotEmpty) {
+                        _showAlertDialogCompensar(context);
+                        _sendDataHabits(context);
+                        _sendDataValoracion(context);
+                        _sendDataInfo(context);
+                        _sendCompensacion(context);
+                      } else {
+                        _showAlertDialogNoDataValo(context);
+                      }
+                    }
+                  } else {
+                    _showAlertDialogNoDataValo(context);
+                  }
                 },
               ),
             )
@@ -851,9 +881,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_transporteList[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: HexColor("FFAA00"),
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: selectedItems == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 selectedItems = i;
@@ -886,9 +917,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_pregunta2[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _oprionGroup2 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _oprionGroup2 = i;
@@ -911,9 +943,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_cantidadCombustible[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: selectedItemsCombustible == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 selectedItemsCombustible = i;
@@ -936,9 +969,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_externalidadesSN[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupListEx == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupListEx = i;
@@ -961,9 +995,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_externalidad6[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupEx6 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupEx6 = i;
@@ -986,9 +1021,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_externalidadesSN[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupEx7 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupEx7 = i;
@@ -1011,9 +1047,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_externalidad8[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupEx8 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupEx8 = i;
@@ -1036,9 +1073,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_externalidadesSN[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupEx9 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupEx9 = i;
@@ -1061,9 +1099,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_compensacion10[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupCo10 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupCo10 = i;
@@ -1086,9 +1125,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_compensacion10[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _optionGroupCo12 == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _optionGroupCo12 = i;
@@ -1111,9 +1151,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_genero[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _generoNum == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _generoNum = i;
@@ -1136,9 +1177,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_civil[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _estadoCivil == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _estadoCivil = i;
@@ -1161,9 +1203,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_educacion[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _nivelEducacion == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _nivelEducacion = i;
@@ -1186,9 +1229,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_economia[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _actividadEconomica == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _actividadEconomica = i;
@@ -1211,9 +1255,10 @@ class _EncuestaState extends State<Encuesta> {
           padding: EdgeInsets.all(1.0),
           child: ChoiceChip(
             label: Text(_ingresosEc[i].toString()),
-            labelStyle: TextStyle(color: Colors.white),
-            backgroundColor: Colors.amber,
+            labelStyle: TextStyle(color: Colors.black),
+            backgroundColor: HexColor("FBF600"),
             selected: _ingresos == i,
+            selectedColor: HexColor("E6F9EA"),
             onSelected: (bool value) {
               setState(() {
                 _ingresos = i;
@@ -1273,8 +1318,6 @@ class _EncuestaState extends State<Encuesta> {
           valorPagar = 150;
         }
       });
-    } else {
-      _showAlertDialogNoData(context);
     }
     return resultadoFinal;
   }
@@ -1303,32 +1346,45 @@ class _EncuestaState extends State<Encuesta> {
         'Considera externalidades': _finalExt8,
         'Estado': _finalExt9,
       });
-    } else {
-      _showAlertDialogNoData(context);
     }
   }
 
   _sendDataValoracion(BuildContext context) async {
     await Firebase.initializeApp();
-    if (_compensacionText10.text.isNotEmpty ||
-        _compensacionText11.text.isNotEmpty ||
-        _compensacionText12.text.isNotEmpty ||
-        _compensacionText13.text.isNotEmpty) {
-      FirebaseFirestore.instance
-          .collection("Encuesta")
-          .doc("docencuestas")
-          .collection("Valoracion Economica")
-          .add({
-        'email': widget.email,
-        'Dispuesto compensar': _finalCom10,
-        'por que no': _compensacionText10.text,
-        'USD': _compensacionText11.text,
-        'dispuesto compensar transporte': _finalCom12,
-        'por que no transporte': _compensacionText12.text,
-        'que otra accion': _compensacionText13.text
-      });
-    } else {
-      _showAlertDialogNoDataValo(context);
+    if (_optionGroupCo10 == 0) {
+      if (_compensacionText11.text.isNotEmpty &&
+          _compensacionText13.text.isNotEmpty) {
+        FirebaseFirestore.instance
+            .collection("Encuesta")
+            .doc("docencuestas")
+            .collection("Valoracion Economica")
+            .add({
+          'email': widget.email,
+          'Dispuesto compensar': _finalCom10,
+          'por que no': _compensacionText10.text,
+          'USD': _compensacionText11.text,
+          'dispuesto compensar transporte': _finalCom12,
+          'por que no transporte': _compensacionText12.text,
+          'que otra accion': _compensacionText13.text
+        });
+      }
+    } else if (_optionGroupCo10 == 1) {
+      if (_compensacionText10.text.isNotEmpty &&
+          _compensacionText13.text.isNotEmpty) {
+        FirebaseFirestore.instance
+            .collection("Encuesta")
+            .doc("docencuestas")
+            .collection("Valoracion Economica")
+            .add({
+          'email': widget.email,
+          'Dispuesto compensar': _finalCom10,
+          'por que no': _compensacionText10.text,
+          'USD': _compensacionText11.text,
+          'dispuesto compensar transporte': _finalCom12,
+          'por que no transporte': _compensacionText12.text,
+          'que otra accion': _compensacionText13.text
+        });
+      }
     }
   }
 
@@ -1348,8 +1404,6 @@ class _EncuestaState extends State<Encuesta> {
         'actividad economica': _finalEconomica,
         'rango ingresos': _finalIngresos
       });
-    } else {
-      _showAlertDialogNoDataInfo(context);
     }
   }
 
